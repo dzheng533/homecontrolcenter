@@ -222,3 +222,23 @@ void readBMP085(int *temp,int *pressure){
    *pressure = CP;
 }
 
+void testCaculation(){
+AC1 = 408;
+AC2 = -72;
+AC3 = -14383;
+AC4 = 32741;
+AC5 = 32757;
+AC6 = 23153;
+B1 = 6190;
+B2 = 4;
+MB = 32768
+MC = -8711
+MD = 2868;
+UT = 27898;
+UP = 23843;
+
+  CT = calculateTemperature();
+  CP = calculatePressure();
+  printf("Temperature:%d\n",CT);
+  printf("Pressure:%d\n",CP);
+}

@@ -10,5 +10,6 @@ int temperature,pressure = 0;
  convertBMP085All();
  readBMP085(&temperature,&pressure);
  printf("BMP085 Temperture: %1f ℃,Pressure:%d par\n",(double)temperature/10,pressure);
+ testCaculation();
  return 0;
 }

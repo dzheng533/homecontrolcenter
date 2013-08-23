@@ -11,4 +11,5 @@
 int initBMP085(int pressureLevel);
 int convertBMP085All();
 void readBMP085(int *temp,int *pressure);
+void testCaculation();
 #endif
