@@ -1,4 +1,5 @@
 #include "bmp085.h"
+#include <math.h>
 
 #define bmpAddress 0x77
 #define bmpREGAC1  0xAA
@@ -23,7 +24,8 @@ int initialized = 0;
 short AC1,AC2,AC3 = 0x00;
 unsigned short AC4,AC5,AC6 = 0x00;
 short B1,B2,MB,MC,MD = 0x00;
-long B3,B4,B5,B6,B7 = 0;
+long B3,B5,B6,B7 = 0;
+unsigned long B4 = 0;
 
 int UT,UP = 0;
 int CT,CP=0;
@@ -31,13 +33,14 @@ int CT,CP=0;
 
 long calculateTemperature(){
   long X1,X2,T = 0;
-  
+
   X1 = ((UT-AC6)*AC5) >> 15;
   X2 = (MC<<11)/(X1+MD);
   B5 = X1 + X2;
+  printf("X1=%d,X2=%d,B5=%d.\n",X1,X2,B5);
   T = (B5+8) >> 4;
   #ifdef DEBUG_BMP085
-  printf("UT:0x%02x,Temperature:%d\n",UT,T);
+  printf("UT:%d,Temperature:%d\n",UT,T);
   #endif
   return T;
 }
@@ -63,7 +66,7 @@ int calculatePressure(){
   #ifdef DEBUG_BMP085
   printf("X3:%d\n",X3);
   #endif
-  B3 = ((AC1*4 + X3)<<osrs + 2)/4;
+  B3 = (((AC1*4 + X3)<<osrs) + 2)/4;
   #ifdef DEBUG_BMP085
   printf("B3:%d\n",B3);
   #endif
@@ -89,8 +92,10 @@ int calculatePressure(){
   #endif
   if(B7< 0x80000000){
     P = (B7 * 2)/B4;
+    //printf("1.P:%d",P);
   }else{
     P = (B7/B4) * 2;
+    //printf("2.P:%d;",P);
   }
   #ifdef DEBUG_BMP085
   printf("P:%d\n",P);
@@ -116,7 +121,18 @@ int calculatePressure(){
   #endif
   return P;
 }
-
+int calculateAltitude(){
+   int alititude = 0;
+   double x, y ,z =0;
+   double p,p0=0;
+   p = (double)CP/100;
+   p0 = 1013.25;
+   x = p/p0;
+   y = 1/5.255;
+   z = pow(x,y);
+   alititude = (int)(44330 * (1-z));
+   return alititude;
+}
 
 int readPressure(){
 
@@ -168,7 +184,7 @@ int initBMP085(int pressureLevel){
    }else{
       osrs = 3;
    }
-   
+
    fd = wiringPiI2CSetup(bmpAddress);
    if(fd > 0){
      regAdd = 0xAA;
@@ -199,10 +215,10 @@ int initBMP085(int pressureLevel){
 	   else if(regAdd-2 == 0xBC)
 	     MC = regValue;
 	   else if(regAdd-2 == 0xBE)
-	     MD = regValue;	 
+	     MD = regValue;
      }
    }
-   
+
    initialized = 1;
    return fd;
 }
@@ -231,12 +247,12 @@ AC5 = 32757;
 AC6 = 23153;
 B1 = 6190;
 B2 = 4;
-MB = 32768
-MC = -8711
+MB = 32768;
+MC = -8711;
 MD = 2868;
 UT = 27898;
 UP = 23843;
-
+osrs = 0;
   CT = calculateTemperature();
   CP = calculatePressure();
   printf("Temperature:%d\n",CT);

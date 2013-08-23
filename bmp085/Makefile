@@ -1,7 +1,7 @@
 ##Makefile for bmp085 module
 CC = gcc
 INCLUDE = -I
-LIBS = -lwiringPi
+LIBS = -lwiringPi -lm
 
 SRC = bmp085.c bmpmain.c
 OBJ = $(SRC:.c=.o)
@@ -11,7 +11,7 @@ all: bmpmain
 bmpmain: $(OBJ)
 	@echo "[Building]"
 	@echo "Building bmpmain..."
-	@$(CC) $(TARGET) $(OBJ) $(LIBS)
+	@$(CC) -o bmpmain $(OBJ) $(LIBS)
 .c.o:
 	@echo "Compiling $^"
 	@$(CC) -c $(CFLAGS) -o $@ $^

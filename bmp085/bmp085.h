@@ -6,10 +6,11 @@
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 
-//#define DEBUG_BMP085
+#define DEBUG_BMP085
 
 int initBMP085(int pressureLevel);
 int convertBMP085All();
 void readBMP085(int *temp,int *pressure);
+int calculateAltitude();
 void testCaculation();
 #endif
