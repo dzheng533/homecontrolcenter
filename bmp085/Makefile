@@ -5,13 +5,13 @@ LIBS = -lwiringPi -lm
 
 SRC = bmp085.c bmpmain.c
 OBJ = $(SRC:.c=.o)
-TARGET = -o bmp085
+TARGET = -o bmpmain
 
 all: bmpmain
 bmpmain: $(OBJ)
 	@echo "[Building]"
 	@echo "Building bmpmain..."
-	@$(CC) -o bmpmain $(OBJ) $(LIBS)
+	@$(CC) $(TARGET) $(OBJ) $(LIBS)
 .c.o:
 	@echo "Compiling $^"
 	@$(CC) -c $(CFLAGS) -o $@ $^

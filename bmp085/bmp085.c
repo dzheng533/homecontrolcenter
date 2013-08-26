@@ -21,9 +21,9 @@ int osrs = 3;
 int initialized = 0;
 
 //Registers
-short AC1,AC2,AC3 = 0x00;
-unsigned short AC4,AC5,AC6 = 0x00;
-short B1,B2,MB,MC,MD = 0x00;
+short AC1,AC2,AC3 = 0;
+unsigned short AC4,AC5,AC6 = 0;
+short B1,B2,MB,MC,MD = 0;
 long B3,B5,B6,B7 = 0;
 unsigned long B4 = 0;
 

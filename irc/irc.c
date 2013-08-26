@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <wiringPi.h>
 
-#define IRPORT 5
+#define IRPORT 6
 
 void receive(){
    int pulse = 0;
@@ -20,7 +20,7 @@ void receive(){
         printf("pulse : %d\n",pulse);
         pulse = 0;
       }
-      delayMicroseconds(10);//      delay(1);
+      delayMicroseconds(1);//      delay(1);
       if(pulse >20000)
          break;
     }
@@ -31,7 +31,7 @@ int main(int argc, char **args){
    int pid =0;
    int sign = 0;
    int lastsign =0;
-
+   int count = 0;
    pid = getpid();
    printf("IRC detect starting. pid:%d.\n",pid);
    if(wiringPiSetup() == -1)
@@ -39,13 +39,27 @@ int main(int argc, char **args){
    pinMode(IRPORT,INPUT);
    while(1){
       sign = digitalRead(IRPORT);
-      if(lastsign && !sign){
+      if(lastsign==sign){
+         //count>0?printf("\nCount:%d\n",count):"";
+         //count =0;
+         continue;
+      }
+
+      if(sign){
+         printf("--");
+      }else{
+         printf("__");
+      }
+      count++;
+      lastsign = sign;
+      delayMicroseconds(1);
+ /* 
+     if(lastsign && !sign){
          printf("Start Receive.\n");
          receive();
          printf("End Receive.\n");
       }
-      lastsign = sign;
       delay(100);
-      
+*/
    }
 }

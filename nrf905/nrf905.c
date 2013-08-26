@@ -30,16 +30,16 @@ int main(){
     printf("0x%lX ",rfSConf[i]);
   }
   printf ("\n");
-  
+
   wiringPiSetup();
   if(wiringPiSPISetup(0,500000) == -1){
   	printf("Could not initialise SPI.\n");
     return -1;
   }
- 
+
   //Write config
   //wiringPiSPIDataRW(0,rfSConf,11);
-  
+
   //Read config
   wiringPiSPIDataRW(0,rfRConf,11);
   printf("Read Config: ");

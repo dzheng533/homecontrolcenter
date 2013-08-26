@@ -1,7 +1,9 @@
+CC = gcc
 
 all: irc
 
 irc: irc.o
-     $(GCC) -o $@ -lwiringPi
+	$(CC) -o $@ -lwiringPi
 
-clean: $(RM) *.o irc
+clean:
+	$(RM) *.o irc
