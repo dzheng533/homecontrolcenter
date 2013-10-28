@@ -1,6 +1,7 @@
 #include "fork.h"
+void (*callbackOnExit)() = NULL;
 
-int init_daemon()
+int init_daemon(void (*callBackHanle)())
 {
     FILE *fp = NULL;
     pid_t fid;
@@ -14,7 +15,7 @@ int init_daemon()
     	fgets(spid,10,fp);
     	printf("Daemon Thread has been started.pid:%s.\n",spid);
     	fclose(fp);
-    		return(-1);
+    	return(-1);
     }
 
     fid = fork();
@@ -38,6 +39,10 @@ int init_daemon()
     	 fprintf(fp,"%d",pid);
     	 fclose(fp);
     	 fp = NULL;
+		 //update callback handler
+		 if(callBackHanle != NULL){
+		     callbackOnExit = callBackHanle;
+		 }
     	 return 0;
     }
 }
@@ -47,6 +52,7 @@ void sig_term(int signo){
     /* catched signal sent by kill(1) command */
     syslog(LOG_INFO, "program terminated.");
     closelog();
+	(*callbackOnExit)();
     unlink(PIDFILE);
     exit(0);
   }
