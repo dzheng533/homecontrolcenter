@@ -1,5 +1,6 @@
 #include "fork.h"
 void (*callbackOnExit)() = NULL;
+void sig_term(int signo);
 
 int init_daemon(void (*callBackHanle)())
 {
@@ -41,8 +42,13 @@ int init_daemon(void (*callBackHanle)())
     	 fp = NULL;
 		 //update callback handler
 		 if(callBackHanle != NULL){
+		     (*callBackHanle)();
 		     callbackOnExit = callBackHanle;
 		 }
+		 //handle signal
+		 openlog("daemontest", LOG_PID, LOG_USER);
+         syslog(LOG_INFO, "program started.");
+         signal(SIGTERM, &sig_term); /* arrange to catch the signal */
     	 return 0;
     }
 }

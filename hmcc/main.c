@@ -3,23 +3,27 @@
 #include "fork.h"
 #include "log.h"
 
+#define VERSION 1.0.0
+
 void onExit(){
-   logInfo("[INFO] App Exit.");
+   logInfo("App Exit.");
 }
 int main(int argc,char** args){
-
+  
+  logInfo("App Start.");
   if(argc >1){
-    //if(args[1]
+    if(strcmp(args[1],"daemon") == 0){
+      if(init_daemon(&onExit)){
+        exit(-1);
+      }
+      logInfo("App daemon thread start.");
+	}else{
+	   //Start as normal app
+	   logInfo("App normal thread start.");
+	}
   }
-  if(init_daemon(&onExit)){
-    exit(-1);
-  }
-
-  openlog("daemontest", LOG_PID, LOG_USER);
-  syslog(LOG_INFO, "program started.");
-  signal(SIGTERM, sig_term); /* arrange to catch the signal */
-
   while(1){
-     sleep(10);
+      
+      sleep(10000);
   }
 }

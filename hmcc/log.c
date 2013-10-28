@@ -1,35 +1,39 @@
 
 #include "log.h"
 FILE *fp = NULL;
-
+char tmpbuf[20];
+void locTime(){
+    time_t t;
+	struct tm *newtime;
+	t = time(NULL);
+	newtime=localtime(&t);
+	strftime(tmpbuf, 20, "%F %T", newtime);
+}
 void logInfo(char* message){
-    //check lock file
-    if(access(LOGFILE,F_OK)==0 && access(LOGFILE,R_OK)==0){
-    	fp = fopen(LOGFILE,"a+");
-    	fgets(spid,10,fp);
-    	printf("[INFO] %s.\n", message);
+    fp = fopen(LOGFILE,"a+");
+	if(fp != NULL){
+    	locTime();
+    	fprintf(fp,"[INFO] %s - %s.\n",tmpbuf , message);
     	fclose(fp);
     	fp = NULL;
     }
 }
 void logError(char* message){
-    //check lock file
-    if(access(LOGFILE,F_OK)==0 && access(LOGFILE,R_OK)==0){
-    	fp = fopen(LOGFILE,"a+");
-    	fgets(spid,10,fp);
-    	printf("[ERROR] %s.\n", message);
+    fp = fopen(LOGFILE,"a+");
+	if(fp != NULL){
+    	locTime();
+    	fprintf(fp,"[ERROR] %s - %s.\n", tmpbuf, message);
     	fclose(fp);
     	fp = NULL;
     }
 }
 void logDebug(char* message){
-    //check lock file
-    if(access(LOGFILE,F_OK)==0 && access(LOGFILE,R_OK)==0){
-    	fp = fopen(LOGFILE,"a+");
-    	fgets(spid,10,fp);
-    	printf("[DEBUG] %s.\n", message);
+    fp = fopen(LOGFILE,"a+");
+    if(fp != NULL){
+    	locTime();
+	    fprintf(fp,"[DEBUG] %s - %s.\n", tmpbuf, message);
     	fclose(fp);
     	fp = NULL;
-    }
+   }
 }
 

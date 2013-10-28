@@ -3,7 +3,7 @@ CC = gcc
 INCLUDE = -I
 LIBS = -lwiringPi -lm
 
-SRC = bmp085.c fork.c main.c
+SRC = bmp085.c fork.c log.c main.c
 OBJ = $(SRC:.c=.o)
 TARGET = -o hmcc
 
