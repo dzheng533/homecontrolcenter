@@ -2,7 +2,7 @@
 #include "log.h"
 
 char * trim(char *str);
-
+int validate(char *str);
 int w1DeviceList(char **deviceList){
    int iDevCount = 0;
    FILE *fp = NULL;
@@ -20,19 +20,21 @@ int w1DeviceList(char **deviceList){
    		while(!feof(fp)){
    			if(NULL != (deviceID = (char*)malloc(sizeof(char)*IDLEN))){
    			  fgets(deviceID,IDLEN,fp);
-   			  trim(deviceID);
-   			  if(strlen(deviceID)>0 && (strcspn(deviceID,"not") == -1)){
-   			    if(iDevCount < MAXW1DEVICE){
-   			      deviceList[iDevCount++] = deviceID;
-   			    }else{
-   			  
-   			    }
-   			  }
-   		  }else{
+   			  if(validate(deviceID) == 1){
+			     logInfo(deviceID);
+   			     if(strlen(deviceID)>0){
+   			       if(iDevCount < MAXW1DEVICE){
+   			         deviceList[iDevCount++] = deviceID;
+   			       }else{
+   			         logError("Support Max Device:");
+   			       }
+   			     
+   		         }else{
    		  	
-   		  }
-   		  
-   		}
+   		         }
+		     }
+   		   }
+		}
    }else{
      //can't find W1 Device.
    }
@@ -100,12 +102,18 @@ double readTemperature(char *deviceID){
 	tempContent = NULL;
   return douTemperature;	
 }
-
+int validate(char *str){
+     if(*str != '2')
+	    return 0;
+	else
+	    return 1;
+}
 char * trim(char *str)
 {
     char *str_last,*str_cur;
     if(str==NULL)
         return NULL;
+	
     for(;*str==0x20 || *str=='\t'; ++str);
     for(str_last=str_cur=str;*str_cur!='\0';++str_cur)
         if(*str_cur!=0x20&&*str_cur!='\t'&&*str_cur!='\n')
