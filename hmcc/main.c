@@ -5,7 +5,7 @@
 int main(int argc,char** args){
 
   if(argc >1){
-    if(args[1]
+    //if(args[1]
   }
   if(init_daemon()){
     exit(-1);
