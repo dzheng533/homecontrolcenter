@@ -11,7 +11,7 @@
 
 #define PIDFILE "/var/run/hmcc.pid"
 
-int init_daemon();
+int init_daemon(void (*callBackHanle)());
 void sig_term(int signo);
 
 #endif
