@@ -1,8 +1,8 @@
 #include "fork.h"
-void (*callbackOnExit)() = NULL;
+void (*callbackOnExit)(int code) = NULL;
 void sig_term(int signo);
 
-int init_daemon(void (*callBackHanle)())
+int init_daemon(void (*callBackHanle)(int code))
 {
     FILE *fp = NULL;
     pid_t fid;
@@ -26,14 +26,15 @@ int init_daemon(void (*callBackHanle)())
     }
     else if (fid > 0 ) {
         //printf("Father process exited!\n"); 
-        return(-3);
-    }else{
+        //exit(0);
+		return(-3);
+    }else{ 
     	 setsid();
-		   for (i = 0;i < getdtablesize();i++){
-		     close(i);
-		   }
-		   chdir("/");
-		   umask(0);
+		 for (i = 0;i < getdtablesize();i++){
+		   close(i);
+		 }
+		 chdir("/");
+		 umask(0);
     	 pid = getpid();
     	 //Set lock file
     	 fp = fopen(PIDFILE,"w+");
@@ -42,13 +43,13 @@ int init_daemon(void (*callBackHanle)())
     	 fp = NULL;
 		 //update callback handler
 		 if(callBackHanle != NULL){
-		     (*callBackHanle)();
 		     callbackOnExit = callBackHanle;
 		 }
 		 //handle signal
-		 openlog("daemontest", LOG_PID, LOG_USER);
-         syslog(LOG_INFO, "program started.");
          signal(SIGTERM, &sig_term); /* arrange to catch the signal */
+		 signal(SIGSTOP, &sig_term);
+		 signal(SIGTSTP, &sig_term);
+		 signal(SIGHUP,SIG_IGN);
     	 return 0;
     }
 }
@@ -56,11 +57,16 @@ int init_daemon(void (*callBackHanle)())
 void sig_term(int signo){
     if(signo == SIGTERM){
     /* catched signal sent by kill(1) command */
-    syslog(LOG_INFO, "program terminated.");
-    closelog();
-	(*callbackOnExit)();
-    unlink(PIDFILE);
+	unlink(PIDFILE);
+	(*callbackOnExit)(signo);
     exit(0);
+  }else if(signo == SIGSTOP){
+    (*callbackOnExit)(signo);
+	exit(0);
+  }else if(signo == SIGTSTP){
+    (*callbackOnExit)(signo);
+  }else{
+    (*callbackOnExit)(signo);
   }
 }
 

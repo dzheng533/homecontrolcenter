@@ -134,7 +134,7 @@ int calculateAltitude(){
    return alititude;
 }
 
-int readPressure(){
+int readBmp085Pressure(){
 
   int MSB,LSB,XLSB = 0;
   int pressure = 0;
@@ -154,7 +154,7 @@ int readPressure(){
   UP = pressure;
   return pressure;
 }
-double readTemperature(){
+double readBmp085Temperature(){
   int MSB,LSB = 0;
   int temperature;
   if(fd>0){
@@ -227,8 +227,8 @@ int convertBMP085All(){
   if(initialized == 0)
     return -1;
   //Start convert process
-  readTemperature();
-  readPressure();
+  readBmp085Temperature();
+  readBmp085Pressure();
   CT = calculateTemperature();
   CP = calculatePressure();
 }

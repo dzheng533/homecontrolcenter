@@ -20,8 +20,8 @@ int w1DeviceList(char **deviceList){
    		while(!feof(fp)){
    			if(NULL != (deviceID = (char*)malloc(sizeof(char)*IDLEN))){
    			  fgets(deviceID,IDLEN,fp);
-   			 	trim(deviceID);
-   			 	if(strlen(deviceID)>0){
+   			  trim(deviceID);
+   			  if(strlen(deviceID)>0 && (strcspn(deviceID,"not") == -1)){
    			    if(iDevCount < MAXW1DEVICE){
    			      deviceList[iDevCount++] = deviceID;
    			    }else{

@@ -1,7 +1,7 @@
 ##Makefile for hmcc application
 CC = gcc
 INCLUDE = -I
-LIBS = -lwiringPi -lm
+LIBS = -lwiringPi -lsqlite3 -lm
 
 SRC = bmp085.c fork.c log.c dbsqlite3.c w1temp.c main.c
 OBJ = $(SRC:.c=.o)
