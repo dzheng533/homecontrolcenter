@@ -3,9 +3,9 @@
 //
 //
 var doubanFM = function(){
-	var channelsObj = null;
+	this.channelsObj = null;
 
-    loadChannels = function(divObject){
+    this.loadChannels = function(divObject){
        channelsObj = $(divObject);
        var ulChannels = $("<ul></ul>");
        $.getJSON("http://douban.fm/j/app/radio/channels",function(data){
