@@ -8,6 +8,29 @@ var doubanFM = function(){
     this.loadChannels = function(divObject){
        channelsObj = $(divObject);
        var ulChannels = $("<ul></ul>");
+       $.ajax({
+        url:'http://douban.fm/j/app/radio/channels',
+        type:"GET",
+        crossDomain:true,
+        dataType:"json",
+        headers: {
+            "Access-Control-Allow-Origin":"http://douban.fm",
+            "Access-Control-Allow-Headers":"X-Requested-With"
+        }
+
+       }).done(function(data){
+        //sucess
+        alert("sucess"+data);
+       })
+       .fail(function(data){
+        //error
+                alert("error"+data);
+       })
+       .always(function(data){
+        //complete
+                alert("complete"+data);
+       });
+       /*
        $.getJSON("http://douban.fm/j/app/radio/channels",function(data){
        	  for (var i = 0; i < data.channels.length; i++) {
        	  	var liChannel = $("<li></li>");
@@ -19,6 +42,6 @@ var doubanFM = function(){
        	  	ulChannels.append(liChannel);
        	  };
        	  channelsObj.append(ulChannels);
-       });
+       });*/ //End getJSON
     };
 };
