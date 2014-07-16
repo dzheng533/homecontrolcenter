@@ -29,10 +29,16 @@ int main(int argc, char const *argv[])
     hwClock = (struct tm)* malloc(sizeof(struct tm));
 	fd = wiringPiI2CSetup(DS3231ADDR);
 	if(fd >0){
-       hwClock->tm_second = wiringPiI2CReadReg8(fd,REG_SECOND);
-
-	}*/
-
+       hwClock->tm_sec = wiringPiI2CReadReg8(fd,REG_SECOND);
+       hwClock->tm_min = wiringPiI2CReadReg8(fd,REG_MINUTE);
+       hwClock->tm_hour = wiringPiI2CReadReg8(fd,REG_HOUR);
+       hwClock->tm_wday = wiringPiI2CReadReg8(fd,REG_WEEK);
+       hwClock->tm_mday = wiringPiI2CReadReg8(fd,REG_DATE);
+       hwClock->tm_mon = wiringPiI2CReadReg8(fd,REG_MONTH);
+       hwClock->tm_year = wiringPiI2CReadReg8(fd,REG_YEAR);
+	}
+    printf("HW Clock: %d-%d-%d ", (hwClock->tm_year), (hwClock->tm_mon), hwClock->tm_mday);
+    printf("%s %d:%d:%d\n", wday[hwClock->tm_wday], hwClock->tm_hour, hwClock->tm_min, hwClock->tm_sec);
     free(hwClock);
 	return 0;
 }
