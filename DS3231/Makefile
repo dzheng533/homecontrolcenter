@@ -10,7 +10,7 @@ TARGET = -o ds3231
 all: lcdmain
 lcdmain: $(OBJ)
 	@echo "[Building]"
-	@echo "Building lcdmain..."
+	@echo "Building ds3231..."
 	@$(CC) $(TARGET) $(OBJ) $(LIBS)
 .c.o:
 	@echo "Compiling $^"
