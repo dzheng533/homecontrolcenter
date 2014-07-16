@@ -45,10 +45,10 @@ static const int rowOff[4] = {0x00,0x40,0x14,0x54};
 static int cx,cy;
 
 void writeData(unsigned char data){
-   digitalWrite(PINBASE+LCDDB4,(data&0x08)?1:0);
-   digitalWrite(PINBASE+LCDDB5,(data&0x04)?1:0);
-   digitalWrite(PINBASE+LCDDB6,(data&0x02)?1:0);
-   digitalWrite(PINBASE+LCDDB7,(data&0x01)?1:0);
+   digitalWrite(PINBASE+LCDDB7,(data&0x08)?1:0);
+   digitalWrite(PINBASE+LCDDB6,(data&0x04)?1:0);
+   digitalWrite(PINBASE+LCDDB5,(data&0x02)?1:0);
+   digitalWrite(PINBASE+LCDDB4,(data&0x01)?1:0);
 
    digitalWrite(PINBASE+EN,1);
    delayMicroseconds(50);
@@ -118,8 +118,9 @@ void CURSOR_BLINK(int state){
 
   LCDCmd(LCD_CTRL| lcdControl);
 }
-void putChar(){
-  
+void putChar(unsigned char data){
+  digitalWrite(PINBASE+RS,HIGH);
+  LCDCmdData(data);
 
 }
 void InitLCD(){
@@ -145,16 +146,21 @@ void InitLCD(){
   func = LCD_FUNC;
   LCD4Cmd(func>>4);  delay(35); // the 4th set 4 bit mode
   DISPLAY(TRUE);
-  CURSOR(TRUE);
-  CURSOR_BLINK(TRUE);
+  CURSOR(FALSE);
+  CURSOR_BLINK(FALSE);
   CLR();
-  //Position(0,0);
+  Position(1,1);
+  putChar('A');
+  WriteLCDString("Hello!");
 }
 void LightSwitch(int flag){
   digitalWrite(PINBASE+BGLIGHT,flag);
 }
 void WriteLCDString(char *str){
-
+  while(*str >0){
+   putChar(*str);
+   str++;
+  }
 }
 void Position(int x,int y){
    if(x>16 ||x<0)
