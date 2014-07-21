@@ -1,0 +1,4 @@
+make -C /lib/modules/3.6.11-17-ARCH+/build SUBDIRS=/root/projects/hcc/drivers/nrf905 modules
+make[1]: Entering directory `/usr/src/linux-3.6.11-17-ARCH+'
+  CC [M]  /root/projects/hcc/drivers/nrf905/wiringPi.o
+make[1]: Leaving directory `/usr/src/linux-3.6.11-17-ARCH+'

@@ -1,0 +1,13 @@
+#include <linux/module.h>
+#include <linux/device.h>
+#include <linux/cdev.h>
+#include <linux/init.h>
+#include <linux/fs.h>
+#include <asm/uaccess.h>
+
+MODULE_LICENSE("GPL");
+
+dev_t devnu = 0;   //device number
+
+static ssize_t globalvar_read(struct file *, char *, size_t, loff_t*);
+static ssize_t globalvar_write(struct file *, const char *, size_t, loff_t*);

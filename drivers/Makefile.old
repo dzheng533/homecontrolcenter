@@ -1,0 +1,8 @@
+#Makefile for driver
+CC = gcc
+
+all: driver
+driver:
+	$(CC) -D__KERNEL__ -DMODULE -DLINUX -c -o globalvar.o driver.c
+clean:
+	$(RM) *.o
