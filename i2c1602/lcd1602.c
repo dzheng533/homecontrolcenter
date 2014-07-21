@@ -149,9 +149,9 @@ void InitLCD(){
   CURSOR(FALSE);
   CURSOR_BLINK(FALSE);
   CLR();
-  Position(1,1);
-  putChar('A');
-  WriteLCDString("Hello!");
+  Position(0,0);
+  //putChar('A');
+  //WriteLCDString("Hello!");
 }
 void LightSwitch(int flag){
   digitalWrite(PINBASE+BGLIGHT,flag);
